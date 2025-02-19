@@ -1,6 +1,7 @@
 #include "server.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -39,14 +40,20 @@ void start_server(int port) {
         exit(EXIT_FAILURE);
     }
 
-    if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
-        perror("accept");
-        exit(EXIT_FAILURE);
+    printf("Server is listening...\n");
+
+    while (true) {
+        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
+            perror("accept");
+            exit(EXIT_FAILURE);
+        }
+
+        read(new_socket, buffer, 1024);
+        printf("%s\n", buffer);
+
+        send(new_socket, hello, strlen(hello), 0);
+        printf("Hello message sent\n");
+
+        close(new_socket);
     }
-
-    read(new_socket, buffer, 1024);
-    printf("%s\n", buffer);
-
-    send(new_socket, hello, strlen(hello), 0);
-    printf("Hello message sent\n");
 }
