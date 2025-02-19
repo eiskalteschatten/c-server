@@ -21,4 +21,4 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	gcc -c -o $@ $<
 
 clean:
-	rm -f build/main
+	rm -f build/*.o
